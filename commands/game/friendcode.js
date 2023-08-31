@@ -4,13 +4,13 @@ module.exports.run = async (client, message, args, level, Discord) => {
     case 'set':
     case 'add': {
       if (args.length === 1) {
-        return client.error(message.channel, 'No Code Given!', 'Please supply your Switch friend code!');
+        return client.error(message.channel, 'Aucun code n’a été donné !', 'Veuillez fournir votre code ami Switch !');
       }
 
       let code = args.slice(1).join().replace(/[\D]/g, '');
 
       if (code.length !== 12) {
-        return client.error(message.channel, 'Invalid Code!', 'The code must have 12 digits!');
+        return client.error(message.channel, 'Code invalide !', 'Le code doit comporter 12 chiffres !');
       }
 
       code = `SW-${code.slice(0, 4)}-${code.slice(4, 8)}-${code.slice(8, 12)}`;
@@ -19,8 +19,8 @@ module.exports.run = async (client, message, args, level, Discord) => {
       const name = client.userDB.get(message.author.id, 'island.profileName');
 
       const embed = new Discord.MessageEmbed()
-        .setAuthor({ name: `${message.member.displayName}'s Friend Code`, iconURL: message.author.displayAvatarURL() })
-        .setTitle('Successfully set your friend code!')
+        .setAuthor({ name: `${message.member.displayName} Code ami`, iconURL: message.author.displayAvatarURL() })
+        .setTitle('Votre code ami a été enregistré avec succès !')
         .setColor('#e4000f')
         .setDescription(`**${code}**${name ? `\nSwitch Profile Name: **${name}**` : ''}`);
 
@@ -31,21 +31,21 @@ module.exports.run = async (client, message, args, level, Discord) => {
     case 'remove':
       if (client.userDB.has(message.author.id, 'friendcode')) {
         client.userDB.delete(message.author.id, 'friendcode');
-        return client.success(message.channel, 'Successfully Deleted!', "I've successfully deleted your friend code! You can set it again by typing \`.fc set <code>\`!");
+        return client.success(message.channel, 'Supprimé avec succès !', "J'ai bien supprimé votre code d'ami ! Vous pouvez le redéfinir en tapant \`.fc set <code>\` !");
       }
-      return client.error(message.channel, 'No Friend Code To Remove!', 'You did not have a friend code in the database. You can set it by typing \`.fc set <code>\`!');
+      return client.error(message.channel, 'Pas de code ami à supprimer !', 'Vous ne possédez pas de code ami dans la base de données. Vous pouvez le définir en tapant \`.fc set <code>\` !');
     default: {
       if (args.length === 0) {
         // Return user's friend code if they have one
         const fc = client.userDB.ensure(message.author.id, client.config.userDBDefaults).friendcode;
         if (!fc) {
-          return client.error(message.channel, 'No Code Found!', 'You have not set a friend code! You can do so by running \`.fc set <code>\`!');
+          return client.error(message.channel, 'Aucun code trouvé !', 'Vous n’avez pas défini de code ami ! Vous pouvez le faire en effectuant \`.fc set <code>\` !');
         }
 
         const name = client.userDB.get(message.author.id, 'island.profileName');
 
         const embed = new Discord.MessageEmbed()
-          .setAuthor({ name: `${message.member.displayName}'s Friend Code`, iconURL: message.author.displayAvatarURL() })
+          .setAuthor({ name: `${message.member.displayName} Code ami`, iconURL: message.author.displayAvatarURL() })
           .setColor('#e4000f')
           .setDescription(`**${fc}**${name ? `\nSwitch Profile Name: **${name}**` : ''}`);
 
@@ -66,20 +66,20 @@ module.exports.run = async (client, message, args, level, Discord) => {
       if (member) {
         const fc = client.userDB.ensure(member.user.id, client.config.userDBDefaults).friendcode;
         if (!fc) {
-          return client.error(message.channel, 'No Code Found!', `${member.displayName} has not set their friend code!`);
+          return client.error(message.channel, 'Aucun code trouvé !', `${member.displayName} n’a pas défini son code d'ami !`);
         }
 
         const name = client.userDB.get(member.user.id, 'island.profileName');
 
         const embed = new Discord.MessageEmbed()
-          .setAuthor({ name: `${member.displayName}'s Friend Code`, iconURL: member.user.displayAvatarURL() })
+          .setAuthor({ name: `${member.displayName} Code ami`, iconURL: member.user.displayAvatarURL() })
           .setColor('#e4000f')
           .setDescription(`**${fc}**${name ? `\nSwitch Profile Name: **${name}**` : ''}`);
 
         return message.channel.send({ embeds: [embed] });
       }
 
-      return client.error(message.channel, 'Unknown Member!', 'Could not find a member by that name!');
+      return client.error(message.channel, 'Membre inconnu !', 'Il n’a pas été possible de trouver un membre ayant ce nom !');
     }
   }
 };
@@ -103,7 +103,7 @@ module.exports.conf = {
 module.exports.help = {
   name: 'friendcode',
   category: 'game',
-  description: 'Switch friend code management',
+  description: 'Gestion du code ami Switch',
   usage: 'friendcode <set|del> <code|@member>',
-  details: "<set|del> => Whether to set a new friend code or delete an existing one.\n<code|@member> => Only necessary if you're setting a new code or getting the code of another member.",
+  details: "<set|del> => Permet de définir un nouveau code d'ami ou de supprimer un code existant.\n<code|@member> => Nécessaire uniquement si vous définissez un nouveau code ou si vous obtenez le code d'un autre membre.",
 };
