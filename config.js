@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const config = {
-  token: 'MTE0NjgwNDU0MDA3MTQ3NzM0OQ.GiMlE4.aKZVOMyAD1BUDGGVcNhd1RKgerc_KjB9jtQ6qE',
+  token: '',
 
   // Twitter
   twitterAPIKey: '',
